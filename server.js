@@ -739,6 +739,80 @@ app.post('/api/qr', async (req, res) => {
   }
 });
 
+// --- HTTP FALLBACK / SYNC ENDPOINTS FOR 100% RELIABLE CLASSROOM PLAY ---
+app.get('/api/player/check-pin', (req, res) => {
+  const cleanPin = String(req.query.pin || '').replace(/\s+/g, '');
+  const room = rooms.get(cleanPin);
+  if (!room) {
+    return res.json({
+      ok: false,
+      error: 'Mã PIN không tồn tại hoặc phòng thi đã kết thúc!',
+    });
+  }
+  if (room.status === 'podium') {
+    return res.json({
+      ok: false,
+      error: 'Trận đấu này đã kết thúc. Hãy xin mã PIN mới từ giảng viên!',
+    });
+  }
+  res.json({
+    ok: true,
+    pin: room.pin,
+    quizTitle: room.quiz.title,
+    coverEmoji: room.quiz.coverEmoji,
+    status: room.status,
+    playerCount: room.players.size,
+  });
+});
+
+app.get('/api/player/state', (req, res) => {
+  const cleanPin = String(req.query.pin || '').replace(/\s+/g, '');
+  const token = String(req.query.token || '');
+  const room = rooms.get(cleanPin);
+  if (!room) {
+    return res.json({ ok: false, closed: true });
+  }
+  const player = Array.from(room.players.values()).find(
+    (p) => p.playerToken === token
+  );
+  if (!player) {
+    return res.json({ ok: false, kicked: true });
+  }
+  player.connected = true;
+  res.json({ ok: true, state: buildPlayerState(room, player) });
+});
+
+app.post('/api/player/answer', (req, res) => {
+  const { pin, playerToken, optionIndex } = req.body || {};
+  const cleanPin = String(pin || '').replace(/\s+/g, '');
+  const room = rooms.get(cleanPin);
+  if (!room) {
+    return res.json({ ok: false, error: 'Phòng không tồn tại.' });
+  }
+  const player = Array.from(room.players.values()).find(
+    (p) => p.playerToken === playerToken
+  );
+  if (!player) {
+    return res.json({ ok: false, error: 'Không tìm thấy thông tin người chơi.' });
+  }
+  player.connected = true;
+  const recorded = recordPlayerAnswer(room, player, Number(optionIndex));
+  res.json({
+    ok: recorded || Boolean(player.answers[room.currentQuestionIndex]),
+    state: buildPlayerState(room, player),
+  });
+});
+
+app.get('/api/host/state', (req, res) => {
+  const cleanPin = String(req.query.pin || '').replace(/\s+/g, '');
+  const token = String(req.query.token || '');
+  const room = rooms.get(cleanPin);
+  if (!room || room.hostToken !== token) {
+    return res.json({ ok: false });
+  }
+  res.json({ ok: true, room: buildHostState(room) });
+});
+
 // ==========================================
 // SOCKET.IO HANDLERS
 // ==========================================
@@ -1113,8 +1187,44 @@ io.on('connection', (socket) => {
       return cb?.({ ok: false, error: 'Không tìm thấy thông tin người chơi.' });
     }
 
+    player.socketId = socket.id;
+    player.connected = true;
     const recorded = recordPlayerAnswer(room, player, Number(optionIndex));
-    cb?.({ ok: recorded });
+    cb?.({
+      ok: recorded || Boolean(player.answers[room.currentQuestionIndex]),
+      state: buildPlayerState(room, player),
+    });
+  });
+
+  // --- STUDENT HEARTBEAT / SYNC ---
+  socket.on('player:sync', ({ pin, playerToken }, cb) => {
+    const cleanPin = String(pin || '').replace(/\s+/g, '');
+    const room = rooms.get(cleanPin);
+    if (!room) {
+      return cb?.({ ok: false, closed: true });
+    }
+    const player = Array.from(room.players.values()).find(
+      (p) => p.playerToken === playerToken
+    );
+    if (!player) {
+      return cb?.({ ok: false, kicked: true });
+    }
+    player.socketId = socket.id;
+    player.connected = true;
+    socket.join(`room:${room.pin}`);
+    cb?.({ ok: true, state: buildPlayerState(room, player) });
+  });
+
+  // --- HOST HEARTBEAT / SYNC ---
+  socket.on('host:sync', ({ pin, hostToken }, cb) => {
+    const cleanPin = String(pin || '').replace(/\s+/g, '');
+    const room = rooms.get(cleanPin);
+    if (!room || room.hostToken !== hostToken) {
+      return cb?.({ ok: false });
+    }
+    room.hostSocketId = socket.id;
+    socket.join(`room:${room.pin}`);
+    cb?.({ ok: true, room: buildHostState(room) });
   });
 
   // --- DISCONNECT ---
