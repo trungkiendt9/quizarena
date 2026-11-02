@@ -14,6 +14,7 @@ const ROOT_DIR = __dirname;
 const DATA_DIR = ROOT_DIR;
 const QUIZZES_FILE = path.join(DATA_DIR, 'quizzes.json');
 const HISTORY_FILE = path.join(DATA_DIR, 'history.json');
+const TEACHER_AUTH_FILE = path.join(DATA_DIR, 'teacher_auth.json');
 const PUBLIC_APP_DIR = ROOT_DIR;
 
 if (!fs.existsSync(DATA_DIR)) {
@@ -37,6 +38,96 @@ function writeJsonSafe(filePath, data) {
   } catch (err) {
     console.error(`Error writing ${filePath}:`, err);
   }
+}
+
+// ==========================================
+// TEACHER PASSWORD AUTHENTICATION
+// ==========================================
+const DEFAULT_TEACHER_PASSWORD =
+  process.env.TEACHER_PASSWORD || 'giangvien2026';
+
+function hashPasswordWithSalt(password, salt) {
+  return crypto
+    .scryptSync(String(password), String(salt), 64)
+    .toString('hex');
+}
+
+function getOrInitTeacherAuthConfig() {
+  const existing = readJsonSafe(TEACHER_AUTH_FILE, null);
+  if (existing && existing.salt && existing.passwordHash && existing.secret) {
+    return existing;
+  }
+  const salt = crypto.randomBytes(16).toString('hex');
+  const secret = crypto.randomBytes(32).toString('hex');
+  const passwordHash = hashPasswordWithSalt(DEFAULT_TEACHER_PASSWORD, salt);
+  const config = {
+    salt,
+    passwordHash,
+    secret,
+    updatedAt: new Date().toISOString(),
+  };
+  writeJsonSafe(TEACHER_AUTH_FILE, config);
+  return config;
+}
+
+function verifyTeacherPassword(plainPassword) {
+  if (!plainPassword) return false;
+  // Also allow matching env override if TEACHER_PASSWORD env is explicitly set
+  if (
+    process.env.TEACHER_PASSWORD &&
+    String(plainPassword) === String(process.env.TEACHER_PASSWORD)
+  ) {
+    return true;
+  }
+  const cfg = getOrInitTeacherAuthConfig();
+  const candidateHash = hashPasswordWithSalt(plainPassword, cfg.salt);
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(candidateHash, 'hex'),
+      Buffer.from(cfg.passwordHash, 'hex')
+    );
+  } catch {
+    return false;
+  }
+}
+
+function generateTeacherToken() {
+  const cfg = getOrInitTeacherAuthConfig();
+  return crypto
+    .createHmac('sha256', cfg.secret)
+    .update(cfg.passwordHash)
+    .digest('hex');
+}
+
+function isValidTeacherToken(token) {
+  if (!token || typeof token !== 'string') return false;
+  const expected = generateTeacherToken();
+  if (token.length !== expected.length) return false;
+  try {
+    return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(expected));
+  } catch {
+    return false;
+  }
+}
+
+function extractBearerToken(req) {
+  const authHeader = String(req.headers.authorization || '');
+  if (authHeader.startsWith('Bearer ')) {
+    return authHeader.slice(7).trim();
+  }
+  return '';
+}
+
+function requireTeacherAuth(req, res, next) {
+  const token = extractBearerToken(req);
+  if (!isValidTeacherToken(token)) {
+    return res.status(401).json({
+      ok: false,
+      unauthorized: true,
+      error: 'Vui lòng nhập mật khẩu Giảng viên để tiếp tục.',
+    });
+  }
+  next();
 }
 
 const app = express();
@@ -588,14 +679,69 @@ function recordPlayerAnswer(room, player, optionIndex) {
 }
 
 // ==========================================
-// REST API ENDPOINTS
+// TEACHER AUTH & PROTECTED REST API ENDPOINTS
 // ==========================================
-app.get('/api/quizzes', (req, res) => {
+app.post('/api/teacher/login', (req, res) => {
+  const password = String(req.body?.password || '');
+  if (!verifyTeacherPassword(password)) {
+    return res.status(401).json({
+      ok: false,
+      error: 'Mật khẩu Giảng viên không chính xác!',
+    });
+  }
+  res.json({
+    ok: true,
+    token: generateTeacherToken(),
+  });
+});
+
+app.get('/api/teacher/verify', (req, res) => {
+  const token = extractBearerToken(req);
+  if (!isValidTeacherToken(token)) {
+    return res.status(401).json({ ok: false });
+  }
+  res.json({ ok: true });
+});
+
+app.post('/api/teacher/change-password', requireTeacherAuth, (req, res) => {
+  const currentPassword = String(req.body?.currentPassword || '');
+  const newPassword = String(req.body?.newPassword || '').trim();
+
+  if (!verifyTeacherPassword(currentPassword)) {
+    return res.status(400).json({
+      ok: false,
+      error: 'Mật khẩu hiện tại không đúng!',
+    });
+  }
+  if (newPassword.length < 4) {
+    return res.status(400).json({
+      ok: false,
+      error: 'Mật khẩu mới cần có ít nhất 4 ký tự.',
+    });
+  }
+
+  const salt = crypto.randomBytes(16).toString('hex');
+  const secret = crypto.randomBytes(32).toString('hex');
+  const passwordHash = hashPasswordWithSalt(newPassword, salt);
+  writeJsonSafe(TEACHER_AUTH_FILE, {
+    salt,
+    passwordHash,
+    secret,
+    updatedAt: new Date().toISOString(),
+  });
+
+  res.json({
+    ok: true,
+    token: generateTeacherToken(),
+  });
+});
+
+app.get('/api/quizzes', requireTeacherAuth, (req, res) => {
   const quizzes = readJsonSafe(QUIZZES_FILE, []);
   res.json(quizzes);
 });
 
-app.post('/api/quizzes', (req, res) => {
+app.post('/api/quizzes', requireTeacherAuth, (req, res) => {
   const quizzes = readJsonSafe(QUIZZES_FILE, []);
   const body = req.body || {};
   if (!body.title || !Array.isArray(body.questions) || body.questions.length === 0) {
@@ -629,7 +775,7 @@ app.post('/api/quizzes', (req, res) => {
   res.status(201).json(newQuiz);
 });
 
-app.put('/api/quizzes/:id', (req, res) => {
+app.put('/api/quizzes/:id', requireTeacherAuth, (req, res) => {
   const quizzes = readJsonSafe(QUIZZES_FILE, []);
   const idx = quizzes.findIndex((q) => q.id === req.params.id);
   if (idx === -1) {
@@ -668,7 +814,7 @@ app.put('/api/quizzes/:id', (req, res) => {
   res.json(updated);
 });
 
-app.post('/api/quizzes/:id/duplicate', (req, res) => {
+app.post('/api/quizzes/:id/duplicate', requireTeacherAuth, (req, res) => {
   const quizzes = readJsonSafe(QUIZZES_FILE, []);
   const source = quizzes.find((q) => q.id === req.params.id);
   if (!source) {
@@ -686,19 +832,19 @@ app.post('/api/quizzes/:id/duplicate', (req, res) => {
   res.status(201).json(copy);
 });
 
-app.delete('/api/quizzes/:id', (req, res) => {
+app.delete('/api/quizzes/:id', requireTeacherAuth, (req, res) => {
   const quizzes = readJsonSafe(QUIZZES_FILE, []);
   const filtered = quizzes.filter((q) => q.id !== req.params.id);
   writeJsonSafe(QUIZZES_FILE, filtered);
   res.json({ ok: true });
 });
 
-app.get('/api/history', (req, res) => {
+app.get('/api/history', requireTeacherAuth, (req, res) => {
   const history = readJsonSafe(HISTORY_FILE, []);
   res.json(history);
 });
 
-app.delete('/api/history/:id', (req, res) => {
+app.delete('/api/history/:id', requireTeacherAuth, (req, res) => {
   const history = readJsonSafe(HISTORY_FILE, []);
   const filtered = history.filter((h) => h.id !== req.params.id);
   writeJsonSafe(HISTORY_FILE, filtered);
@@ -817,8 +963,15 @@ app.get('/api/host/state', (req, res) => {
 // SOCKET.IO HANDLERS
 // ==========================================
 io.on('connection', (socket) => {
-  // --- HOST CREATES ROOM ---
-  socket.on('host:create_room', ({ quizId, settings }, cb) => {
+  // --- HOST CREATES ROOM (REQUIRES TEACHER AUTH TOKEN) ---
+  socket.on('host:create_room', ({ quizId, settings, teacherToken }, cb) => {
+    if (!isValidTeacherToken(teacherToken)) {
+      return cb?.({
+        ok: false,
+        unauthorized: true,
+        error: 'Phiên đăng nhập Giảng viên đã hết hạn. Vui lòng nhập lại mật khẩu!',
+      });
+    }
     const quizzes = readJsonSafe(QUIZZES_FILE, []);
     const quiz = quizzes.find((q) => q.id === quizId);
     if (!quiz) {
