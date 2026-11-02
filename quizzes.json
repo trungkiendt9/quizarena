@@ -1,0 +1,420 @@
+[
+  {
+    "id": "quiz-ai-101",
+    "title": "Nhập môn Trí tuệ Nhân tạo & Kỷ nguyên Số",
+    "description": "Bộ câu hỏi khởi động sôi nổi dành cho sinh viên các ngành CNTT, Kinh tế số và Kỹ thuật.",
+    "category": "Công nghệ & AI",
+    "coverEmoji": "🤖",
+    "coverGradient": "from-violet-600 via-purple-600 to-indigo-700",
+    "createdAt": "2026-10-25T08:00:00.000Z",
+    "playCount": 14,
+    "questions": [
+      {
+        "id": "q-ai-1",
+        "type": "multiple_choice",
+        "question": "Ai được xem là \"Cha đẻ của Khoa học Máy tính\" và đề xuất phép thử đánh giá trí thông minh của máy?",
+        "codeSnippet": "",
+        "options": [
+          "Alan Turing",
+          "John von Neumann",
+          "Geoffrey Hinton",
+          "Claude Shannon"
+        ],
+        "correctIndices": [
+          0
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 1,
+        "explanation": "Alan Turing đề xuất \"Turing Test\" vào năm 1950 trong bài báo kinh điển 'Computing Machinery and Intelligence'."
+      },
+      {
+        "id": "q-ai-2",
+        "type": "multiple_choice",
+        "question": "Trong kiến trúc Transformer (nền tảng của các mô hình ngôn ngữ lớn LLM), chữ \"T\" trong GPT viết tắt của từ gì?",
+        "codeSnippet": "",
+        "options": [
+          "Training",
+          "Tokenization",
+          "Transformer",
+          "Tensor"
+        ],
+        "correctIndices": [
+          2
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 1,
+        "explanation": "GPT là viết tắt của Generative Pre-trained Transformer — kiến trúc mạng nơ-ron dựa trên cơ chế Self-Attention."
+      },
+      {
+        "id": "q-ai-3",
+        "type": "true_false",
+        "question": "Học có giám sát (Supervised Learning) là phương pháp huấn luyện mô hình trên tập dữ liệu CHƯA ĐƯỢC gán nhãn.",
+        "codeSnippet": "",
+        "options": [
+          "Đúng",
+          "Sai"
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 15,
+        "pointsMultiplier": 1,
+        "explanation": "Sai! Học có giám sát (Supervised Learning) yêu cầu dữ liệu ĐÃ ĐƯỢC gán nhãn (input - output). Dữ liệu chưa gán nhãn thuộc về Học không giám sát (Unsupervised Learning)."
+      },
+      {
+        "id": "q-ai-4",
+        "type": "multiple_choice",
+        "question": "Hiện tượng mô hình học quá thuộc lòng dữ liệu huấn luyện nhưng dự đoán kém trên dữ liệu mới gọi là gì?",
+        "codeSnippet": "Train Accuracy: 99.8%  |  Validation Accuracy: 61.2%",
+        "options": [
+          "Underfitting (Chưa khớp)",
+          "Overfitting (Quá khớp)",
+          "Gradient Vanishing",
+          "Data Normalization"
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 2,
+        "explanation": "Overfitting (Quá khớp) xảy ra khi mô hình ghi nhớ cả nhiễu trong tập huấn luyện, làm giảm khả năng tổng quát hóa trên dữ liệu thực tế."
+      },
+      {
+        "id": "q-ai-5",
+        "type": "multiple_choice",
+        "question": "Thuật toán tìm kiếm nào sau đây sử dụng hàm đánh giá f(n) = g(n) + h(n) để tìm đường đi ngắn nhất tối ưu?",
+        "codeSnippet": "",
+        "options": [
+          "Tìm kiếm theo chiều rộng (BFS)",
+          "Tìm kiếm theo chiều sâu (DFS)",
+          "Thuật toán A* (A-Star)",
+          "Leo đồi (Hill Climbing)"
+        ],
+        "correctIndices": [
+          2
+        ],
+        "timeLimit": 25,
+        "pointsMultiplier": 1,
+        "explanation": "A* kết hợp chi phí thực tế từ điểm đầu g(n) và hàm heuristic ước lượng chi phí tới đích h(n)."
+      },
+      {
+        "id": "q-ai-6",
+        "type": "multiple_choice",
+        "question": "Khi AI tự tạo ra thông tin nghe rất thuyết phục nhưng hoàn toàn sai sự thật, hiện tượng đó gọi là gì?",
+        "codeSnippet": "",
+        "options": [
+          "AI Hallucination (Ảo giác AI)",
+          "Deepfake Rendering",
+          "Prompt Injection",
+          "Zero-shot Learning"
+        ],
+        "correctIndices": [
+          0
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 2,
+        "explanation": "Ảo giác AI (Hallucination) là hiện tượng mô hình sinh ra nội dung không chính xác hoặc bịa đặt thông tin như thật."
+      }
+    ]
+  },
+  {
+    "id": "quiz-web-cs",
+    "title": "Lập trình Web & Cơ sở Dữ liệu Thực chiến",
+    "description": "Kiểm tra nhanh kiến thức HTTP, JavaScript, SQL và kiến trúc Web hiện đại dành cho sinh viên CNTT.",
+    "category": "Kỹ thuật Phần mềm",
+    "coverEmoji": "💻",
+    "coverGradient": "from-blue-600 via-cyan-600 to-teal-600",
+    "createdAt": "2026-10-26T10:15:00.000Z",
+    "playCount": 10,
+    "questions": [
+      {
+        "id": "q-web-1",
+        "type": "multiple_choice",
+        "question": "Mã trạng thái HTTP (Status Code) nào biểu thị lỗi \"Không tìm thấy tài nguyên yêu cầu\" (Not Found)?",
+        "codeSnippet": "GET /api/v1/sinh-vien/99999 HTTP/1.1",
+        "options": [
+          "200 OK",
+          "401 Unauthorized",
+          "404 Not Found",
+          "500 Internal Server Error"
+        ],
+        "correctIndices": [
+          2
+        ],
+        "timeLimit": 15,
+        "pointsMultiplier": 1,
+        "explanation": "404 Not Found cho biết máy chủ không tìm thấy tài nguyên tại đường dẫn URL mà client yêu cầu."
+      },
+      {
+        "id": "q-web-2",
+        "type": "multiple_choice",
+        "question": "Kết quả in ra màn hình console của đoạn mã JavaScript sau là gì?",
+        "codeSnippet": "console.log(typeof null);",
+        "options": [
+          "\"null\"",
+          "\"object\"",
+          "\"undefined\"",
+          "\"number\""
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 2,
+        "explanation": "Trong JavaScript, typeof null trả về \"object\" — đây là một lỗi lịch sử nổi tiếng từ phiên bản đầu tiên của JS được giữ lại để tương thích ngược."
+      },
+      {
+        "id": "q-web-3",
+        "type": "multiple_choice",
+        "question": "Trong SQL, mệnh đề nào được dùng để lọc kết quả SAU KHI đã nhóm bằng GROUP BY?",
+        "codeSnippet": "SELECT khoa, COUNT(*) FROM sinh_vien GROUP BY khoa _____ COUNT(*) > 50;",
+        "options": [
+          "WHERE",
+          "ORDER BY",
+          "HAVING",
+          "DISTINCT"
+        ],
+        "correctIndices": [
+          2
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 1,
+        "explanation": "WHERE lọc từng dòng trước khi nhóm, còn HAVING dùng để lọc trên các hàm tổng hợp (COUNT, SUM, AVG...) sau GROUP BY."
+      },
+      {
+        "id": "q-web-4",
+        "type": "true_false",
+        "question": "Giao thức WebSocket cho phép truyền dữ liệu hai chiều (Full-Duplex) thời gian thực trên một kết nối TCP duy nhất.",
+        "codeSnippet": "",
+        "options": [
+          "Đúng",
+          "Sai"
+        ],
+        "correctIndices": [
+          0
+        ],
+        "timeLimit": 15,
+        "pointsMultiplier": 1,
+        "explanation": "Chính xác! WebSocket duy trì kết nối liên tục giữa trình duyệt và server, rất lý tưởng cho game trực tuyến như QuizArena!"
+      },
+      {
+        "id": "q-web-5",
+        "type": "multiple_choice",
+        "question": "Độ phức tạp thời gian trung bình của thao tác tìm kiếm nhị phân (Binary Search) trên mảng đã sắp xếp n phần tử là gì?",
+        "codeSnippet": "",
+        "options": [
+          "O(n)",
+          "O(log n)",
+          "O(n log n)",
+          "O(1)"
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 2,
+        "explanation": "Mỗi bước Binary Search chia đôi không gian tìm kiếm, nên độ phức tạp thời gian là O(log₂ n)."
+      }
+    ]
+  },
+  {
+    "id": "quiz-econ-startup",
+    "title": "Kinh tế Vi mô & Tư duy Khởi nghiệp",
+    "description": "Ôn tập học phần Kinh tế học đại cương và Quản trị khởi nghiệp đổi mới sáng tạo.",
+    "category": "Kinh tế & Quản trị",
+    "coverEmoji": "📈",
+    "coverGradient": "from-amber-500 via-orange-600 to-rose-600",
+    "createdAt": "2026-10-28T14:00:00.000Z",
+    "playCount": 11,
+    "questions": [
+      {
+        "id": "q-ec-1",
+        "type": "multiple_choice",
+        "question": "Giá trị của phương án tốt nhất bị bỏ qua khi đưa ra một sự lựa chọn kinh tế được gọi là gì?",
+        "codeSnippet": "",
+        "options": [
+          "Chi phí chìm (Sunk Cost)",
+          "Chi phí cơ hội (Opportunity Cost)",
+          "Chi phí cận biên (Marginal Cost)",
+          "Chi phí cố định (Fixed Cost)"
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 1,
+        "explanation": "Chi phí cơ hội là giá trị của lựa chọn tốt nhất tiếp theo mà bạn phải đánh đổi khi quyết định chọn một phương án."
+      },
+      {
+        "id": "q-ec-2",
+        "type": "multiple_choice",
+        "question": "Trong khởi nghiệp Tinh gọn (Lean Startup), thuật ngữ \"MVP\" là viết tắt của cụm từ nào?",
+        "codeSnippet": "",
+        "options": [
+          "Most Valuable Player",
+          "Minimum Viable Product",
+          "Maximum Venture Profit",
+          "Market Validation Plan"
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 1,
+        "explanation": "Minimum Viable Product (Sản phẩm khả dụng tối thiểu) giúp startup kiểm chứng giả thuyết với khách hàng thật nhanh nhất với chi phí thấp nhất."
+      },
+      {
+        "id": "q-ec-3",
+        "type": "true_false",
+        "question": "Theo quy luật Cầu (Law of Demand), khi giá hàng hóa tăng lên (các yếu tố khác không đổi), lượng cầu sẽ TĂNG.",
+        "codeSnippet": "",
+        "options": [
+          "Đúng",
+          "Sai"
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 15,
+        "pointsMultiplier": 1,
+        "explanation": "Sai! Khi giá hàng hóa tăng lên (ceteris paribus), lượng cầu đối với hàng hóa đó sẽ GIẢM xuống."
+      },
+      {
+        "id": "q-ec-4",
+        "type": "multiple_choice",
+        "question": "Nếu giá trà sữa tăng làm nhu cầu mua cà phê tăng lên, thì trà sữa và cà phê là hai mặt hàng gì?",
+        "codeSnippet": "",
+        "options": [
+          "Hàng hóa bổ sung",
+          "Hàng hóa thay thế",
+          "Hàng hóa thứ cấp",
+          "Hàng hóa công cộng"
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 2,
+        "explanation": "Hai hàng hóa có thể đáp ứng cùng một nhu cầu tương tự nhau được gọi là hàng hóa thay thế (Substitutes)."
+      },
+      {
+        "id": "q-ec-5",
+        "type": "multiple_choice",
+        "question": "Chỉ số nào sau đây thường được sử dụng phổ biến nhất để đo lường mức độ lạm phát tiêu dùng của một quốc gia?",
+        "codeSnippet": "",
+        "options": [
+          "CPI (Chỉ số giá tiêu dùng)",
+          "FDI (Đầu tư trực tiếp nước ngoài)",
+          "ROI (Tỷ suất hoàn vốn)",
+          "KPI (Chỉ số hiệu suất)"
+        ],
+        "correctIndices": [
+          0
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 1,
+        "explanation": "CPI (Consumer Price Index) phản ánh biến động giá cả của giỏ hàng hóa và dịch vụ tiêu dùng thiết yếu theo thời gian."
+      }
+    ]
+  },
+  {
+    "id": "quiz-vn-campus",
+    "title": "Đấu trường Sinh viên: Văn hóa, Khoa học & Đời sống",
+    "description": "Bộ đề khuấy động không khí lớp học đầu giờ (Icebreaker) cực vui dành cho mọi chuyên ngành!",
+    "category": "Kiến thức Tổng hợp",
+    "coverEmoji": "🎓",
+    "coverGradient": "from-emerald-500 via-teal-600 to-cyan-700",
+    "createdAt": "2026-10-30T09:00:00.000Z",
+    "playCount": 23,
+    "questions": [
+      {
+        "id": "q-vn-1",
+        "type": "multiple_choice",
+        "question": "Trường đại học đầu tiên của Việt Nam được thành lập vào năm 1076 dưới triều Lý có tên là gì?",
+        "codeSnippet": "",
+        "options": [
+          "Quốc Tử Giám",
+          "Thiền viện Trúc Lâm",
+          "Hàn Lâm Viện",
+          " Quốc Học Huế"
+        ],
+        "correctIndices": [
+          0
+        ],
+        "timeLimit": 15,
+        "pointsMultiplier": 1,
+        "explanation": "Quốc Tử Giám được vua Lý Nhân Tông cho lập năm 1076 tại kinh thành Thăng Long — trường đại học đầu tiên của nước ta."
+      },
+      {
+        "id": "q-vn-2",
+        "type": "multiple_choice",
+        "question": "Tỉnh/thành nào của Việt Nam nổi tiếng là cái nôi của Dân ca Quan họ — Di sản văn hóa phi vật thể đại diện của nhân loại?",
+        "codeSnippet": "",
+        "options": [
+          "Quảng Ninh & Hải Phòng",
+          "Bắc Ninh & Bắc Giang",
+          "Nam Định & Thái Bình",
+          "Thanh Hóa & Nghệ An"
+        ],
+        "correctIndices": [
+          1
+        ],
+        "timeLimit": 15,
+        "pointsMultiplier": 1,
+        "explanation": "Dân ca Quan họ vùng Kinh Bắc (Bắc Ninh - Bắc Giang) được UNESCO ghi danh là Di sản văn hóa phi vật thể đại diện của nhân loại năm 2009."
+      },
+      {
+        "id": "q-vn-3",
+        "type": "multiple_choice",
+        "question": "Phương pháp quản lý thời gian chia phiên học tập thành 25 phút tập trung cao độ và 5 phút nghỉ ngắn gọi là gì?",
+        "codeSnippet": "25 phút Tập trung 🍅  ➔  5 phút Nghỉ ngơi ☕",
+        "options": [
+          "Phương pháp Pomodoro",
+          "Ma trận Eisenhower",
+          "Quy tắc Pareto 80/20",
+          " Sơ đồ tư duy Mindmap"
+        ],
+        "correctIndices": [
+          0
+        ],
+        "timeLimit": 15,
+        "pointsMultiplier": 1,
+        "explanation": "Kỹ thuật Pomodoro (quả cà chua) do Francesco Cirillo phát triển khi ông còn là sinh viên đại học cuối thập niên 1980!"
+      },
+      {
+        "id": "q-vn-4",
+        "type": "true_false",
+        "question": "Ánh sáng Mặt Trời mất khoảng 8 phút 20 giây để truyền tới Trái Đất.",
+        "codeSnippet": "",
+        "options": [
+          "Đúng",
+          "Sai"
+        ],
+        "correctIndices": [
+          0
+        ],
+        "timeLimit": 15,
+        "pointsMultiplier": 1,
+        "explanation": "Đúng! Với khoảng cách trung bình ~149,6 triệu km và vận tốc ánh sáng ~300.000 km/s, ánh sáng cần khoảng 499 giây (~8 phút 19 giây)."
+      },
+      {
+        "id": "q-vn-5",
+        "type": "multiple_choice",
+        "question": "Nguyên tố hóa học nào chiếm tỷ lệ lớn nhất trong bầu khí quyển Trái Đất?",
+        "codeSnippet": "",
+        "options": [
+          "Oxy (O₂)",
+          "Cacbon điôxít (CO₂)",
+          "Nitơ (N₂)",
+          "Hydro (H₂)"
+        ],
+        "correctIndices": [
+          2
+        ],
+        "timeLimit": 20,
+        "pointsMultiplier": 2,
+        "explanation": "Khí Nitơ (N₂) chiếm khoảng 78% thể tích khí quyển Trái Đất, trong khi Oxy chiếm khoảng 21%."
+      }
+    ]
+  }
+]
