@@ -1,0 +1,5 @@
+﻿Loại câu,Câu hỏi,Code minh họa,Đáp án A,Đáp án B,Đáp án C,Đáp án D,Đáp án đúng,Thời gian (giây),Hệ số điểm (1/2/0),Giải thích
+"Trắc nghiệm","Thủ đô của Việt Nam là thành phố nào?","","TP. Hồ Chí Minh","Hà Nội","Đà Nẵng","Cần Thơ","B",20,1,"Hà Nội trở thành kinh đô từ năm 1010 (Thăng Long) và là Thủ đô của nước CHXHCN Việt Nam."
+"Trắc nghiệm","Trong Python, đoạn mã sau in ra gì?","print(len([10, 20, 30]) * 2)","3","6","60","Báo lỗi cú pháp","B",30,2,"Hàm len() trả về 3 phần tử, nhân 2 bằng 6."
+"Đúng/Sai","HTML là ngôn ngữ lập trình hướng đối tượng.","","Đúng","Sai","","","Sai",15,1,"Sai! HTML chỉ là ngôn ngữ đánh dấu siêu văn bản."
+"Trắc nghiệm","Hệ quản trị nào là Cơ sở dữ liệu quan hệ (RDBMS)?","SELECT * FROM sinh_vien;","PostgreSQL","MySQL","MongoDB","Redis","A, B",30,2,"PostgreSQL và MySQL dùng mô hình bảng quan hệ SQL."

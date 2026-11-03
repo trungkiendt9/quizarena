@@ -1,14 +1,14 @@
 {
-  "name": "quizarena-vn-deploy",
-  "version": "1.2.0",
-  "description": "QuizArena - Đấu trường trắc nghiệm sinh viên (Bản bảo mật mật khẩu Giảng viên - 7 file phẳng)",
+  "name": "quizarena-render-deploy",
+  "version": "2.2.0",
+  "description": "QuizArena - Đấu trường trắc nghiệm sinh viên (Bản phẳng triển khai GitHub Web & Render.com)",
   "type": "module",
   "main": "server.js",
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "echo \"Build ready\"",
+    "build": "echo \"Frontend prebuilt ready\"",
     "start": "node server.js"
   },
   "dependencies": {

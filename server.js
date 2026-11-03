@@ -679,8 +679,12 @@ function recordPlayerAnswer(room, player, optionIndex) {
 }
 
 // ==========================================
-// TEACHER AUTH & PROTECTED REST API ENDPOINTS
+// HEALTH CHECK (RENDER.COM) & TEACHER AUTH
 // ==========================================
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, status: 'healthy', uptime: Math.round(process.uptime()) });
+});
+
 app.post('/api/teacher/login', (req, res) => {
   const password = String(req.body?.password || '');
   if (!verifyTeacherPassword(password)) {
@@ -739,6 +743,58 @@ app.post('/api/teacher/change-password', requireTeacherAuth, (req, res) => {
 app.get('/api/quizzes', requireTeacherAuth, (req, res) => {
   const quizzes = readJsonSafe(QUIZZES_FILE, []);
   res.json(quizzes);
+});
+
+app.post('/api/quizzes/restore', requireTeacherAuth, (req, res) => {
+  const incoming = Array.isArray(req.body?.quizzes)
+    ? req.body.quizzes
+    : Array.isArray(req.body)
+    ? req.body
+    : null;
+  if (!incoming) {
+    return res.status(400).json({ error: 'Tệp JSON không đúng định dạng danh sách bộ đề.' });
+  }
+  const mode = req.body?.mode === 'replace' ? 'replace' : 'merge';
+  const sanitized = incoming
+    .filter((item) => item && item.title && Array.isArray(item.questions) && item.questions.length > 0)
+    .map((item, idx) => ({
+      id: item.id || `quiz-${Date.now()}-${idx}`,
+      title: String(item.title).trim(),
+      description: String(item.description || '').trim(),
+      category: String(item.category || 'Đại cương').trim(),
+      coverEmoji: item.coverEmoji || '🎯',
+      coverGradient: item.coverGradient || 'from-violet-600 via-purple-600 to-indigo-700',
+      createdAt: item.createdAt || new Date().toISOString(),
+      playCount: Number(item.playCount || 0),
+      questions: item.questions.map((q, qIdx) => ({
+        id: q.id || `q-${Date.now()}-${idx}-${qIdx}`,
+        type: q.type === 'true_false' ? 'true_false' : 'multiple_choice',
+        question: String(q.question || '').trim(),
+        codeSnippet: String(q.codeSnippet || '').trim(),
+        options: Array.isArray(q.options) ? q.options.map((o) => String(o)) : ['Đáp án A', 'Đáp án B'],
+        correctIndices:
+          Array.isArray(q.correctIndices) && q.correctIndices.length > 0
+            ? q.correctIndices
+            : [0],
+        timeLimit: Number(q.timeLimit) || 20,
+        pointsMultiplier: Number(q.pointsMultiplier ?? 1),
+        explanation: String(q.explanation || '').trim(),
+      })),
+    }));
+
+  if (sanitized.length === 0) {
+    return res.status(400).json({ error: 'Không tìm thấy bộ câu hỏi hợp lệ trong tệp JSON.' });
+  }
+
+  let finalQuizzes = sanitized;
+  if (mode === 'merge') {
+    const existing = readJsonSafe(QUIZZES_FILE, []);
+    const incomingIds = new Set(sanitized.map((q) => q.id));
+    finalQuizzes = [...sanitized, ...existing.filter((e) => !incomingIds.has(e.id))];
+  }
+
+  writeJsonSafe(QUIZZES_FILE, finalQuizzes);
+  res.json({ ok: true, count: sanitized.length, total: finalQuizzes.length });
 });
 
 app.post('/api/quizzes', requireTeacherAuth, (req, res) => {
@@ -1406,14 +1462,26 @@ setInterval(() => {
   }
 }, 30 * 60 * 1000);
 
-// Serve flat frontend assets safely
-app.get('/app.js', (req, res) => res.sendFile(path.join(ROOT_DIR, 'app.js')));
-app.get('/style.css', (req, res) => res.sendFile(path.join(ROOT_DIR, 'style.css')));
+// Serve flat frontend assets safely (never exposing server.js / JSON files via static middleware)
+const setNoCache = (res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+};
+app.get('/app.js', (req, res) => {
+  setNoCache(res);
+  res.sendFile(path.join(ROOT_DIR, 'app.js'));
+});
+app.get('/style.css', (req, res) => {
+  setNoCache(res);
+  res.sendFile(path.join(ROOT_DIR, 'style.css'));
+});
 app.use((req, res, next) => {
-  if (req.method !== 'GET') return next();
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
   if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) {
     return res.status(404).end();
   }
+  setNoCache(res);
   res.sendFile(path.join(ROOT_DIR, 'index.html'));
 });
 

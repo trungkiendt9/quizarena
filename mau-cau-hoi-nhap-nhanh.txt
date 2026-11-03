@@ -1,0 +1,49 @@
+Tên bộ đề: Ôn tập Nhập môn Lập trình & Cơ sở dữ liệu
+Môn học: Công nghệ Thông tin
+Mô tả: Bộ câu hỏi mẫu có đầy đủ tất cả thành phần: Loại câu, Code/Công thức, Đáp án đúng, Thời gian, Hệ số điểm và Giải thích.
+Biểu tượng: 💻
+
+Câu 1: Thủ đô của nước Cộng hòa Xã hội Chủ nghĩa Việt Nam là thành phố nào?
+Loại: Trắc nghiệm
+A. TP. Hồ Chí Minh
+* B. Hà Nội
+C. Đà Nẵng
+D. Cần Thơ
+Đáp án đúng: B
+Thời gian: 20
+Điểm: x1
+Giải thích: Hà Nội trở thành kinh đô từ năm 1010 (Thăng Long) và là Thủ đô của nước CHXHCN Việt Nam.
+
+Câu 2: Trong ngôn ngữ lập trình Python, đoạn mã lệnh sau in ra kết quả gì?
+Loại: Trắc nghiệm
+Code: nums = [10, 20, 30]
+Code: print(len(nums) * 2)
+A. 3
+* B. 6
+C. 60
+D. Báo lỗi cú pháp
+Đáp án đúng: B
+Thời gian: 30
+Điểm: x2
+Giải thích: Hàm len(nums) trả về số phần tử của danh sách là 3, nhân với 2 cho kết quả bằng 6.
+
+Câu 3: HTML là một ngôn ngữ lập trình hướng đối tượng dùng để xử lý cơ sở dữ liệu phía máy chủ.
+Loại: Đúng/Sai
+Đúng
+* Sai
+Đáp án đúng: Sai
+Thời gian: 15
+Điểm: x1
+Giải thích: Sai! HTML (HyperText Markup Language) là ngôn ngữ đánh dấu siêu văn bản dùng để tạo cấu trúc trang web, không phải ngôn ngữ lập trình.
+
+Câu 4: Những hệ quản trị nào sau đây thuộc nhóm Cơ sở dữ liệu quan hệ (RDBMS)? (Chọn nhiều đáp án)
+Loại: Trắc nghiệm
+Code: SELECT * FROM sinh_vien WHERE diem_tb >= 8.0;
+* A. PostgreSQL
+* B. MySQL
+C. MongoDB
+D. Redis
+Đáp án đúng: A, B
+Thời gian: 30
+Điểm: x2
+Giải thích: PostgreSQL và MySQL lưu dữ liệu thành các bảng có quan hệ (SQL), còn MongoDB và Redis là CSDL NoSQL.
